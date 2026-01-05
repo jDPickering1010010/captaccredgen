@@ -1,482 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imperial License - Combined Masked Foil</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #1a1a2e;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Captain Accreditation License Generator</title>
-    <style>
-      .body {
-        font: 20px "Arial", "Helvetica", sans-serif;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-      }
+    .container {
+      background: #f4f4f9;
+      color: #333;
+      padding: 25px;
+      border-radius: 15px;
+      display: inline-block;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+      max-width: 800px;
+    }
 
-      h3 {
-        color: #159;
-      }
+    h3 { color: #159; margin-top: 0; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: left; }
+    .form-section { border-top: 1px solid #ccc; margin-top: 15px; padding-top: 10px; grid-column: span 2; font-weight: bold; color: #159; }
+    label { font-size: 13px; font-weight: bold; }
+    input { padding: 5px; border: 1px solid #159; border-radius: 4px; width: 90%; }
+    input[type="color"] { width: 40px; height: 25px; padding: 1px; }
 
-      .back {
-        margin-left: 10%;
-      }
+    .button-group { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    button, .upload-btn { background: #159; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #0b3d61; }
 
-      #result-no-resize {
-        width: 560px !important;
-        height: 360px !important;
-      }
+    .preview-wrap {
+      position: relative;
+      width: 560px;
+      height: 360px;
+      margin: 20px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
 
-      .container {
-        margin-top: 3em;
-        color: #000;
-        text-align: center;
-      }
+    #result {
+      display: block;
+      background-color: #fff;
+    }
 
-      .image canvas {
-        width: 40%;
-        float: left;
-        margin-top: 3em;
-        color: #000;
-        text-align: center;
-      }
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      
+      background: linear-gradient(90deg, 
+        rgba(255, 0, 0, 0.4), 
+        rgba(0, 0, 255, 0.4), 
+        rgba(0, 255, 0, 0.4), 
+        rgba(255, 0, 255, 0.4)
+      );
+      background-size: 200% 200%;
+      animation: holo-animation1 3s ease infinite;
 
-      .input {
-        display: table;
-        margin-bottom: 1em;
-        width: 60%;
-        font-size: 16px;
-        border: 2px solid #159;
-        border-radius: 5px;
-        padding: 3px;
-      }
+      -webkit-mask-image: url('https://i.ibb.co/xfYbzqN/hhholographic-3.png');
+      -webkit-mask-size: cover;
+      -webkit-mask-mode: color-burn;
+      
+      mask-image: url('https://i.ibb.co/CpcPP5t7/new1maskalt3a-1-1.png');
+      mask-size: cover;
+      mask-mode: color-dodge;
 
-      #file {
-        opacity: 0;
-        width: 0.1px;
-        height: 0.1px;
-        position: absolute;
-      }
+      mix-blend-mode: color-dodge;
+    }
 
-      .upload button {
-        color: #fff;
-        background: #159;
-        padding: 5px;
-        border: 2px solid #159;
-        border-radius: 5px;
-        cursor: pointer;
-      }
+    @keyframes holo-animation1 {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body>
 
-      form span {
-        font-size: 12px;
-      }
-
-      #preview {
-        font-size: 16px;
-        margin-top: 1em;
-        margin-left: 2em;
-      }
-
-      #result {
-        position: relative;
-        width: 70%;
-        margin-left: 15%;
-        color: #125;
-        border: 2px solid #ddd;
-        border-radius: 12px;
-        margin-bottom: 2em;
-      }
-
-      header {
-        width: 100%;
-        background: #159;
-        border-radius: 12px 12px 0 0;
-      }
-
-      header::after {
-        content: "";
-        display: flex;
-        clear: both;
-      }
-
-      .camp {
-        width: 40%;
-        float: left;
-        color: #fff;
-      }
-
-      .camp h4 {
-        margin: 12px auto 0 7px;
-      }
-
-      .camp span {
-        margin-left: 8px;
-      }
-
-      #logo {
-        width: 80px;
-        height: 80px;
-        float: right;
-      }
-
-      .content {
-        width: 80%;
-      }
-
-      .content::after {
-        content: "";
-        display: flex;
-        clear: both;
-      }
-
-      //.content img {
-      float: left;
-      width: 80px;
-      height: 105px;
-      margin-left: 7px;
-      margin-top: 12px;
-      }
-
-      .content ul {
-        width: 50%;
-        float: center;
-        padding-left: 15px;
-      }
-
-      ul li {
-        list-style-type: none;
-      }
-
-      #down {
-        font-size: 18px;
-      }
-
-    </style>
-  </head>
-
-  <body>
+  <div class="container">
     <form id="userForm">
-      <h3>Please fill-in the form</h3>
-      <label>Full Name</label>
-      <input type="text" id="inName" placeholder="Your name..."><br>
-      <label>Date of issue</label>
-      <input type="date" id="inIssue" placeholder="Date of issue...">
-      <label>Homeworld</label>
-      <input type="text" id="inHomeWorld" placeholder="Home World...">
-      <label>Species</label>
-      <input type="text" id="inSpecies" placeholder="Species..."><br>
-      <label>Ship Certification Class</label>
-      <input type="text" id="inClass" placeholder="Class...">
-      <label>BoSS accreditation Id#</label>
-      <input type="number" id="inNum" placeholder="Id#..."><br>
+      <h3>Imperial Bureau of Ships and Services</h3>
+      
+      <div class="form-grid">
+        <div><label>Full Name</label><br><input type="text" id="inName" placeholder="Name" value="Han Solo"></div>
+        <div><label>Date of Issue</label><br><input type="date" id="inIssue"></div>
+        <div><label>Homeworld</label><br><input type="text" id="inHomeWorld" placeholder="Planet" value="Corellia"></div>
+        <div><label>Species</label><br><input type="text" id="inSpecies" placeholder="Species" value="Human"></div>
+        <div><label>Ship Class</label><br><input type="text" id="inClass" placeholder="Class" value="YT-1300"></div>
+        <div><label>BoSS License #</label><br><input type="text" id="inNum" placeholder="ID Number" value="ISB-9920-A"></div>
 
-      <label>Gradient Color 1</label>
-      <input type="color" id="gradColor1" value="#87CEEB">
-      <label>Gradient Color 2</label>
-      <input type="color" id="gradColor2" value="#4682B4">
-      <label>Gradient Color 3</label>
-      <input type="color" id="gradColor3" value="#4682B4">
-      <label>Gradient Color 4</label>
-      <input type="color" id="gradColor4" value="#4682B4">
-      <label>Gradient Color 5</label>
-      <input type="color" id="gradColor5" value="#4682B4"><br>
-      <label>Text Color 1</label>
-      <input type="color" id="textColor1" value="#000000">
-      <label>Text Color 2</label>
-      <input type="color" id="textColor2" value="#000000">
-      <label>Background Color</label>
-      <input type="color" id="bgColor" value="#ffffff">
-      <label>Stroke Pattern Color</label>
-      <input type="color" id="patternColor" value="#4682B4"><br>
+        <div class="form-section">Visual Stylization</div>
+        <div>
+          <label>Header Gradients</label><br>
+          <input type="color" id="gradColor1" value="#87CEEB">
+          <input type="color" id="gradColor2" value="#4682B4">
+          <input type="color" id="gradColor3" value="#4682B4">
+          <input type="color" id="gradColor4" value="#4682B4">
+          <input type="color" id="gradColor5" value="#4682B4">
+        </div>
+        <div>
+          <label>Visual Accents</label><br>
+          <input type="color" id="textColor1" value="#000000">
+          <input type="color" id="textColor2" value="#112255">
+          <input type="color" id="patternColor" value="#4682B4">
+        </div>
+      </div>
 
-      <label for="file" class="upload" id="userimg">Upload an Image</label>
-      <input type="file" accept="image/*" id="fileInput">
-
-      <button id="saveButton">Save Form Data</button>
-      <input type="file" id="loadButton" accept=".csv">
-
-      <button id="randomButton">Generate Random Values</button>
-
-      <button type="submit">Generate Card</button><br>
-
+      <div class="button-group">
+        <label class="upload-btn">Upload Photo <input type="file" id="fileInput" accept="image/*" style="display:none"></label>
+        <button type="button" id="randomButton">Lore Randomizer</button>
+        <button type="button" id="saveButton">Export CSV</button>
+        <input type="file" id="loadButton" accept=".csv" style="display:none">
+        <button type="button" onclick="document.getElementById('loadButton').click()">Import CSV</button>
+        <button type="submit" style="background: #28a745;">Apply All Changes</button>
+      </div>
     </form>
+  </div>
 
-    <canvas id="result" width="560" height="360">Sorry Canvas not supported by current browser</canvas>
+  <br>
+  <div class="preview-wrap">
+    <canvas id="result" width="560" height="360"></canvas>
+    <div class="mask"></div>
+  </div>
 
-    <button id="download" onclick="downloadImage()">Download</button>
+  <br>
+  <button id="downloadBtn" style="background:#444; font-size: 18px; margin-bottom: 40px;">Download Static PNG</button>
 
-    <script>
-      const canvas = document.getElementById("result");
-      const ctx = canvas.getContext("2d");
+  <script>
+    const canvas = document.getElementById("result");
+    const ctx = canvas.getContext("2d");
 
-      canvas.height = 360;
-      canvas.width = 560;
+    let userImage = null;
+    const imgLogo = new Image();
+    const upcLong = new Image();
+    const upcTall = new Image();
+    const cardBase = new Image();
 
-      let userImage = null;
-      let img = new Image();
-      let upc1 = new Image();
-      let upctall = new Image();
+    [imgLogo, upcLong, upcTall, cardBase].forEach(a => a.crossOrigin = "anonymous");
 
-      const cardBaseImp = new Image();
-      cardBaseImp.crossOrigin = "anonymous";
-      cardBaseImp.src = 'https://i.ibb.co/6n2LXzc/card-Base-Imp02.png';
-      cardBaseImp.onload = function() {
-        ctx.drawImage(cardBaseImp, 0, 0, 560, 360);
+    cardBase.src = 'https://i.ibb.co/6n2LXzc/card-Base-Imp02.png';
+    imgLogo.src = 'https://i.ibb.co/5xM7hcd/logo-Imp001.png';
+    upcLong.src = 'https://i.ibb.co/y6jhPxj/upc.png';
+    upcTall.src = 'https://i.ibb.co/1KcZ9wF/upctall.png';
 
-        upctall.crossOrigin = "anonymous";
-        upctall.src = 'https://i.ibb.co/1KcZ9wF/upctall.png';
-        img.crossOrigin = "anonymous";
-        img.src = 'https://i.ibb.co/5xM7hcd/logo-Imp001.png';
-        upc1.crossOrigin = "anonymous";
-        upc1.src = 'https://i.ibb.co/y6jhPxj/upc.png';
-        upc1.onload = function() {
-          drawCard();
-        };
+    cardBase.onload = () => drawCard();
+
+    function drawCard() {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 560, 360);
+      ctx.drawImage(cardBase, 0, 0, 560, 360);
+
+      const grad = ctx.createLinearGradient(0, 10, 0, 60);
+      grad.addColorStop(0, document.getElementById("gradColor1").value);
+      grad.addColorStop(0.25, document.getElementById("gradColor2").value);
+      grad.addColorStop(0.5, document.getElementById("gradColor3").value);
+      grad.addColorStop(0.75, document.getElementById("gradColor4").value);
+      grad.addColorStop(1, document.getElementById("gradColor5").value);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 10, 560, 50);
+
+      ctx.strokeStyle = document.getElementById("patternColor").value;
+      ctx.lineWidth = 0.5;
+      for (let i = 10; i <= 60; i += 5) {
+        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(560, i); ctx.stroke();
+      }
+
+      ctx.fillStyle = document.getElementById("textColor1").value;
+      ctx.textAlign = "center";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("Imperial Bureau of Ships and Services", 280, 32);
+      ctx.font = "14px Arial";
+      ctx.fillText("CAPTAIN'S ACCREDITED LICENSE", 280, 52);
+
+      ctx.drawImage(imgLogo, 10, 11, 48, 48);
+      ctx.drawImage(imgLogo, 502, 11, 48, 48);
+
+      if (userImage) {
+        ctx.drawImage(userImage, 10, 75, 160, 240);
+        ctx.globalAlpha = 0.4;
+        ctx.drawImage(upcTall, 135, 80, 30, 230);
+        ctx.globalAlpha = 1.0;
+      }
+
+      ctx.textAlign = "left";
+      ctx.fillStyle = document.getElementById("textColor2").value;
+      ctx.font = "bold 16px Arial";
+      const infoX = 185;
+      ctx.fillText(`NAME: ${document.getElementById("inName").value.toUpperCase()}`, infoX, 105);
+      ctx.fillText(`ISSUE DATE: ${document.getElementById("inIssue").value}`, infoX, 140);
+      ctx.fillText(`HOMEWORLD: ${document.getElementById("inHomeWorld").value}`, infoX, 175);
+      ctx.fillText(`SPECIES: ${document.getElementById("inSpecies").value}`, infoX, 210);
+      ctx.fillText(`SHIP CLASS: ${document.getElementById("inClass").value}`, infoX, 245);
+      ctx.fillText(`BoSS LICENSE #: ${document.getElementById("inNum").value}`, infoX, 280);
+
+      ctx.drawImage(upcLong, 15, 320, 530, 25);
+
+      ctx.globalCompositeOperation = 'soft-light';
+      const holo = ctx.createLinearGradient(0, 0, 560, 360);
+      holo.addColorStop(0, "rgba(255, 0, 0, 0.1)");
+      holo.addColorStop(0.5, "rgba(0, 255, 0, 0.1)");
+      holo.addColorStop(1, "rgba(0, 0, 255, 0.1)");
+      ctx.fillStyle = holo;
+      ctx.fillRect(0, 0, 560, 360);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    const styleInputs = ["gradColor1", "gradColor2", "gradColor3", "gradColor4", "gradColor5", "textColor1", "textColor2", "patternColor"];
+    styleInputs.forEach(id => {
+      document.getElementById(id).addEventListener("input", drawCard);
+    });
+
+    document.getElementById("randomButton").addEventListener("click", () => {
+      const db = [{s:"Human",w:"Corellia",n:["Dash Rendar","Han Solo"]},{s:"Wookiee",w:"Kashyyyk",n:["Chewbacca","Tarfful"]}];
+      const e = db[Math.floor(Math.random()*db.length)];
+      document.getElementById("inSpecies").value = e.s;
+      document.getElementById("inHomeWorld").value = e.w;
+      document.getElementById("inName").value = e.n[Math.floor(Math.random()*e.n.length)];
+      document.getElementById("inIssue").valueAsDate = new Date();
+      document.getElementById("inNum").value = "ISB-"+Math.random().toString(36).substr(2,6).toUpperCase();
+      drawCard();
+    });
+
+    document.getElementById("fileInput").addEventListener("change", (e) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        userImage = new Image();
+        userImage.onload = () => drawCard();
+        userImage.src = event.target.result;
       };
+      reader.readAsDataURL(e.target.files[0]);
+    });
 
-      function drawCard() {
-        let bgColor = document.getElementById("bgColor").value;
-        let gradColor1 = document.getElementById("gradColor1").value;
-        let gradColor2 = document.getElementById("gradColor2").value;
-        let gradColor3 = document.getElementById("gradColor3").value;
-        let gradColor4 = document.getElementById("gradColor4").value;
-        let gradColor5 = document.getElementById("gradColor5").value;
-        let textColor1 = document.getElementById("textColor1").value;
-        let textColor2 = document.getElementById("textColor2").value;
-        let patternColor = document.getElementById("patternColor").value;
+    document.getElementById("userForm").addEventListener("submit", (e) => { e.preventDefault(); drawCard(); });
 
-        const grad = ctx.createLinearGradient(0, 0, 0, 50);
-        grad.addColorStop(0, gradColor1);
-        grad.addColorStop(0.3, gradColor2);
-        grad.addColorStop(0.5, gradColor3);
-        grad.addColorStop(0.8, gradColor4);
-        grad.addColorStop(1, gradColor5);
-
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, 560, 60);
-
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 10, 560, 50);
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 10);
-        ctx.lineTo(560, 10);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 15);
-        ctx.lineTo(560, 15);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 20);
-        ctx.lineTo(560, 20);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 25);
-        ctx.lineTo(560, 25);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 30);
-        ctx.lineTo(560, 30);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 35);
-        ctx.lineTo(560, 35);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 40);
-        ctx.lineTo(560, 40);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 45);
-        ctx.lineTo(560, 45);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 50);
-        ctx.lineTo(560, 50);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 55);
-        ctx.lineTo(560, 55);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.strokeStyle = patternColor;
-        ctx.beginPath();
-        ctx.moveTo(0, 60);
-        ctx.lineTo(560, 60);
-        ctx.stroke();
-        ctx.closePath();
-
-        ctx.fillStyle = textColor1;
-        ctx.font = "bolder 20px Arial";
-        ctx.fillText("Captain's Accredited License", 10, 55);
-        ctx.fillText("Imperial Bureau of Ships and Services", 10, 30);
-
-        ctx.drawImage(img, 510, 12, 48, 48);
-
-        ctx.fillStyle = textColor2;
-        ctx.fillText(`Name: ${document.getElementById("inName").value}`, 10, 100);
-        ctx.fillText(`Date of Issue: ${document.getElementById("inIssue").value}`, 10, 135);
-        ctx.fillText(`Homeworld: ${document.getElementById("inHomeWorld").value}`, 10, 174);
-        ctx.fillText(`Species: ${document.getElementById("inSpecies").value}`, 10, 213);
-        ctx.fillText(`Starship Class: ${document.getElementById("inClass").value}`, 10, 248);
-        ctx.fillText(`Accreditation License: #${document.getElementById("inNum").value}`, 10, 287);
-
-        ctx.drawImage(upc1, 15, 320, 530, 25);
-
-        if (userImage && userImage.complete) {
-          ctx.drawImage(userImage, 367, 75, 160, 240);
-          ctx.drawImage(upctall, 490, 80, 40, 220);
-        }
-      }
-
-      function loadImage(event) {
-        try {
-          userImage = new Image();
-          userImage.crossOrigin = "anonymous";
-          userImage.src = URL.createObjectURL(event.target.files[0]);
-          userImage.onload = function() {
-            drawCard();
-          };
-        } catch (error) {
-          console.error("Error loading image:", error);
-        }
-      }
-
-      function downloadImage() {
-        try {
-          if (window.navigator.msSaveBlob) {
-            window.navigator.msSaveBlob(canvas.msToBlob(), "Card.png");
-          } else {
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.href = canvas.toDataURL();
-            a.download = "Card.png";
-            a.click();
-            document.body.removeChild(a);
-          }
-        } catch (error) {
-          console.error("Error downloading image:", error);
-        }
-      }
-
-      function saveFormData() {
-        const formData = {
-          inName: document.getElementById("inName").value,
-          inIssue: document.getElementById("inIssue").value,
-          inHomeWorld: document.getElementById("inHomeWorld").value,
-          inSpecies: document.getElementById("inSpecies").value,
-          inClass: document.getElementById("inClass").value,
-          inNum: document.getElementById("inNum").value
-        };
-
-        const csvContent = "data:text/csv;charset=utf-8," +
-          Object.keys(formData).map(key => formData[key]).join(",");
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "form_data.csv");
-        link.click();
-      }
-
-      function loadFormData(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          const csvData = event.target.result;
-          const rows = csvData.split("\n");
-          const formData = rows[0].split(",");
-
-          document.getElementById("inName").value = formData[0];
-          document.getElementById("inIssue").value = formData[1];
-          document.getElementById("inHomeWorld").value = formData[2];
-          document.getElementById("inSpecies").value = formData[3];
-          document.getElementById("inClass").value = formData[4];
-          document.getElementById("inNum").value = formData[5];
-        };
-        reader.readAsText(file);
-      }
-
-      function generateRandomValues() {
-        const names = ["John Doe", "Jane Smith", "Bob Johnson", "Alice Brown"];
-        const homeworlds = ["Ryloth", "Corruscant", "Hoth", "Tatoonie", "Mustafar", "Dathomir"];
-        const species = ["Human", "Bith", "Twi'lek", "Hutt", "Bothan", "Talz", "Wookie"];
-        const classes = ["Freighter", "Transport", "Barge", "Tug", "Hauler", "Special Use Military"];
-        const accreditationNumbers = [123456, 789012, 345678, 901234];
-
-        document.getElementById("inName").value = names[Math.floor(Math.random() * names.length)];
-        document.getElementById("inIssue").value = new Date().toISOString().split("T")[0];
-        document.getElementById("inHomeWorld").value = homeworlds[Math.floor(Math.random() * homeworlds.length)];
-        document.getElementById("inSpecies").value = species[Math.floor(Math.random() * species.length)];
-        document.getElementById("inClass").value = classes[Math.floor(Math.random() * classes.length)];
-        document.getElementById("inNum").value = accreditationNumbers[Math.floor(Math.random() * accreditationNumbers.length)];
-      }
-
-      document.getElementById("fileInput").addEventListener("change", (event) => {
-        if (!event.target.files || event.target.files.length === 0) {
-          console.error("No file selected");
-          return;
-        }
-        loadImage(event);
-      });
-
-      document.getElementById("userForm").addEventListener("submit", (event) => {
-        event.preventDefault();
-        const formData = [
-          document.getElementById("inName").value,
-          document.getElementById("inIssue").value,
-          document.getElementById("inHomeWorld").value,
-          document.getElementById("inSpecies").value,
-          document.getElementById("inClass").value,
-          document.getElementById("inNum").value,
-        ];
-        if (formData.some((field) => field === "")) {
-          console.error("Please fill in all form fields");
-          return;
-        }
-        drawCard();
-      });
-
-      document.getElementById("saveButton").addEventListener("click", saveFormData);
-      document.getElementById("loadButton").addEventListener("change", loadFormData);
-      document.getElementById("randomButton").addEventListener("click", generateRandomValues);
-
-    </script>
-
-  </body>
-
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const link = document.createElement("a");
+      link.download = `Imperial_License_${document.getElementById("inName").value || 'Card'}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  </script>
+</body>
 </html>
-
-<!--Hello, I'm a long comment left by the code, and I want to tell you a internet coding joke. 
-'What did the end-user find when they went to the code humor website?''Error: 404 - Joke not found'
--->
-<!--programmed by Joshua Pickering, assistance and debugging provided by CoPilot and BlackBox Ai-->
