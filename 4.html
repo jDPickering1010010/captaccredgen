@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imperial License - Combined Masked Foil & Layout Swap</title>
+  <title>Imperial Bureau of Ships and Services Captain's Accreditation License Generator</title>
   <style>
-    /* Aurebesh Font Integration */
+
     @font-face {
       font-family: 'Aurek-Besh';
       src: url('https://raw.githubusercontent.com/jDPickering1010010/hostfiles/35316c0bcc4d02ef159b9847b15889729ef54386/fonts/Aurek-Besh.woff') format('woff');
@@ -22,7 +22,6 @@
       text-align: center;
     }
 
-    /* Hidden element to force browser to load the font for Canvas use */
     #fontLoader { font-family: 'Aurek-Besh'; visibility: hidden; position: absolute; }
 
     .container {
@@ -273,7 +272,7 @@
     document.getElementById("swapBtn").addEventListener("click", () => {
       if (activeFont === "Arial") {
         activeFont = "'Aurek-Besh'";
-        sizeMultiplier = 0.4; // Reduction scale
+        sizeMultiplier = 0.6; // Reduction scale
       } else {
         activeFont = "Arial";
         sizeMultiplier = 1.0; // Reset scale
