@@ -3,98 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imperial License - Thirty of Thirty Edition</title>
+  <title>Imperial License - Fixed GIF Export</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
   <style>
-    /* Canonical Aurek-Besh Font */
     @font-face {
       font-family: 'AurekBeshCanonical';
       src: url('https://raw.githubusercontent.com/jDPickering1010010/hostfiles/35316c0bcc4d02ef159b9847b15889729ef54386/fonts/Aurek-Besh.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
     }
 
-    body {
-      font-family: "Arial", sans-serif;
-      background-color: #1a1a2e;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .container {
-      background: #f4f4f9;
-      color: #333;
-      padding: 25px;
-      border-radius: 15px;
-      display: inline-block;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.5);
-      margin-bottom: 20px;
-      max-width: 800px;
-    }
-
-    h3 { color: #159; margin-top: 0; }
+    body { font-family: sans-serif; background-color: #1a1a2e; color: #fff; text-align: center; padding: 20px; }
+    .container { background: #f4f4f9; color: #333; padding: 25px; border-radius: 15px; display: inline-block; max-width: 800px; }
     .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: left; }
-    .form-section { border-top: 1px solid #ccc; margin-top: 15px; padding-top: 10px; grid-column: span 2; font-weight: bold; color: #159; }
-    label { font-size: 13px; font-weight: bold; }
     input { padding: 5px; border: 1px solid #159; border-radius: 4px; width: 90%; }
-    input[type="color"] { width: 40px; height: 25px; padding: 1px; }
-    input[type="checkbox"] { width: auto; margin-right: 5px; cursor: pointer; }
-
     .button-group { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
     button, .upload-btn { background: #159; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-    button:hover { background: #0b3d61; }
-
-    /* The Animated Preview Area */
-    .preview-wrap {
-      position: relative;
-      width: 560px;
-      height: 360px;
-      margin: 20px auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-
+    
+    .preview-wrap { position: relative; width: 560px; height: 360px; margin: 20px auto; border-radius: 12px; overflow: hidden; }
     #result { display: block; background-color: #fff; }
 
-    /* Restore Original Mask Logic */
     .mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      
-      background: linear-gradient(90deg, 
-        rgba(255, 0, 0, 0.4), 
-        rgba(0, 255, 0, 0.4), 
-        rgba(0, 0, 255, 0.4), 
-        rgba(255, 0, 255, 0.4)
-      );
-      background-size: 200% 200%;
-      animation: holo-animation1 3s ease infinite;
-
-      -webkit-mask-image: url('https://i.ibb.co/xfYbzqN/hhholographic-3.png');
-      -webkit-mask-size: cover;
-      -webkit-mask-mode: color-burn;
-      
-      mask-image: url('https://i.ibb.co/CpcPP5t7/new1maskalt3a-1-1.png');
-      mask-size: cover;
-      mask-mode: color-dodge;
-
-      mix-blend-mode: color-dodge;
-      opacity: 0.9; 
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,0,0,0.4), rgba(0,255,0,0.4), rgba(0,0,255,0.4), rgba(255,0,255,0.4));
+      background-size: 200% 200%; animation: holo-animation1 3s ease infinite;
+      -webkit-mask-image: url('https://i.ibb.co/xfYbzqN/hhholographic-3.png'); -webkit-mask-size: cover; -webkit-mask-mode: color-burn;
+      mask-image: url('https://i.ibb.co/CpcPP5t7/new1maskalt3a-1-1.png'); mask-size: cover; mask-mode: color-dodge;
+      mix-blend-mode: color-dodge; opacity: 0.9; 
     }
 
-    @keyframes holo-animation1 {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
+    @keyframes holo-animation1 { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     #status { margin-top: 10px; font-weight: bold; color: #ffcc00; height: 20px; }
   </style>
 </head>
@@ -102,41 +38,23 @@
 
   <div class="container">
     <form id="userForm">
-      <h3>Imperial Bureau of Ships and Services</h3>
-      
+      <h3>Imperial BoSS License Console</h3>
       <div class="form-grid">
-        <div><label>Full Name</label><br><input type="text" id="inName" value="Thocas D'ire"></div>
-        <div><label>Date of Issue</label><br><input type="date" id="inIssue"></div>
+        <div><label>Name</label><br><input type="text" id="inName" value="Thocas D'ire"></div>
+        <div><label>Issue Date</label><br><input type="date" id="inIssue"></div>
         <div><label>Homeworld</label><br><input type="text" id="inHomeWorld" value="Coruscant"></div>
         <div><label>Species</label><br><input type="text" id="inSpecies" value="Human"></div>
-        <div><label>Ship Certification Class</label><br><input type="text" id="inClass" value="Freighter"></div>
-        <div><label>BoSS License #</label><br><input type="text" id="inNum" value="ISB-9920-A"></div>
-
-        <div class="form-section">Visual Stylization & Layout</div>
-        <div>
-          <label><input type="checkbox" id="toggleAurebesh" checked> Use Aurek-Besh Font</label><br>
-          <label><input type="checkbox" id="toggleLayout"> Flip Photo Layout</label>
-        </div>
-        <div>
-          <label>Header Colors</label><br>
-          <input type="color" id="gradColor1" value="#87CEEB">
-          <input type="color" id="gradColor2" value="#4682B4">
-          <input type="color" id="gradColor3" value="#4682B4">
-          <input type="color" id="gradColor4" value="#4682B4">
-          <input type="color" id="gradColor5" value="#4682B4">
-        </div>
-        <div>
-          <label>Visual Accents</label><br>
-          <input type="color" id="textColor1" value="#000000">
-          <input type="color" id="textColor2" value="#112255">
-          <input type="color" id="patternColor" value="#4682B4">
+        <div><label>Class</label><br><input type="text" id="inClass" value="Freighter"></div>
+        <div><label>License #</label><br><input type="text" id="inNum" value="ISB-9920-A"></div>
+        <div style="grid-column: span 2;">
+          <label><input type="checkbox" id="toggleAurebesh" checked> Aurek-Besh</label>
+          <label><input type="checkbox" id="toggleLayout"> Flip Layout</label>
         </div>
       </div>
-
       <div class="button-group">
         <label class="upload-btn">Upload Photo <input type="file" id="fileInput" accept="image/*" style="display:none"></label>
-        <button type="button" id="randomButton">Lore Randomizer</button>
-        <button type="submit" style="background: #28a745;">Update Preview</button>
+        <button type="button" id="randomButton">Randomizer</button>
+        <button type="submit">Update</button>
       </div>
     </form>
   </div>
@@ -148,8 +66,8 @@
 
   <div id="status"></div>
   <div class="button-group">
-    <button id="downloadBtn" style="background:#444;">Download PNG</button>
-    <button id="gifBtn" style="background:#800080;">Record Animated GIF</button>
+    <button id="downloadBtn" style="background:#444;">Save PNG</button>
+    <button id="gifBtn" style="background:#800080;">Record GIF (Loop)</button>
   </div>
 
   <script>
@@ -158,113 +76,70 @@
     const statusDiv = document.getElementById("status");
 
     let userImage = null;
-    const imgLogo = new Image();
-    const upcLong = new Image();
-    const upcTall = new Image();
-    const cardBase = new Image();
+    const assets = {
+      cardBase: 'https://i.ibb.co/6n2LXzc/card-Base-Imp02.png',
+      imgLogo: 'https://i.ibb.co/5xM7hcd/logo-Imp001.png',
+      upcLong: 'https://i.ibb.co/y6jhPxj/upc.png',
+      upcTall: 'https://i.ibb.co/1KcZ9wF/upctall.png'
+    };
+    const images = {};
 
-    const assets = [imgLogo, upcLong, upcTall, cardBase];
-    assets.forEach(a => a.crossOrigin = "anonymous");
-
-    cardBase.src = 'https://i.ibb.co/6n2LXzc/card-Base-Imp02.png';
-    imgLogo.src = 'https://i.ibb.co/5xM7hcd/logo-Imp001.png';
-    upcLong.src = 'https://i.ibb.co/y6jhPxj/upc.png';
-    upcTall.src = 'https://i.ibb.co/1KcZ9wF/upctall.png';
-
-    document.fonts.ready.then(() => {
-        cardBase.onload = () => drawCard();
+    Object.keys(assets).forEach(key => {
+      images[key] = new Image();
+      images[key].crossOrigin = "anonymous";
+      images[key].src = assets[key];
     });
 
-    /**
-     * Scaling function for Aurek-Besh
-     */
-    function fillScaledText(text, x, y, maxWidth, baseSize, fontFace, isBold = true) {
+    images.cardBase.onload = () => drawCard();
+
+    function fillScaledText(text, x, y, maxWidth, baseSize, fontFace) {
       let fontSize = baseSize;
-      ctx.font = `${isBold ? 'bold' : ''} ${fontSize}px ${fontFace}`;
+      ctx.font = `bold ${fontSize}px ${fontFace}`;
       while (ctx.measureText(text).width > maxWidth && fontSize > 8) {
         fontSize--;
-        ctx.font = `${isBold ? 'bold' : ''} ${fontSize}px ${fontFace}`;
+        ctx.font = `bold ${fontSize}px ${fontFace}`;
       }
       ctx.fillText(text, x, y);
     }
 
     function drawCard() {
       const useAurebesh = document.getElementById("toggleAurebesh").checked;
-      const flipLayout = document.getElementById("toggleLayout").checked;
+      const flip = document.getElementById("toggleLayout").checked;
       const fontFace = useAurebesh ? "AurekBeshCanonical" : "Arial";
 
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, 560, 360);
-      ctx.drawImage(cardBase, 0, 0, 560, 360);
-
-      const grad = ctx.createLinearGradient(0, 10, 0, 60);
-      grad.addColorStop(0, document.getElementById("gradColor1").value);
-      grad.addColorStop(0.25, document.getElementById("gradColor2").value);
-      grad.addColorStop(0.5, document.getElementById("gradColor3").value);
-      grad.addColorStop(0.75, document.getElementById("gradColor4").value);
-      grad.addColorStop(1, document.getElementById("gradColor5").value);
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 10, 560, 50);
-
-      ctx.strokeStyle = document.getElementById("patternColor").value;
-      ctx.lineWidth = 0.5;
-      for (let i = 10; i <= 60; i += 5) {
-        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(560, i); ctx.stroke();
-      }
-
-      ctx.fillStyle = document.getElementById("textColor1").value;
-      ctx.textAlign = "center";
-      fillScaledText("Imperial Bureau of Ships and Services", 280, 32, 440, 18, fontFace, true);
-      fillScaledText("CAPTAIN'S ACCREDITED LICENSE", 280, 52, 440, 14, fontFace, false);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0,0,560,360);
+      ctx.drawImage(images.cardBase,0,0,560,360);
       
-      ctx.drawImage(imgLogo, 10, 11, 48, 48);
-      ctx.drawImage(imgLogo, 502, 11, 48, 48);
-
-      const photoX = flipLayout ? 390 : 10;
-      const textX = flipLayout ? 25 : 185;
-
-      if (userImage) {
-        ctx.drawImage(userImage, photoX, 75, 160, 240);
-        ctx.globalAlpha = 0.4;
-        ctx.drawImage(upcTall, flipLayout ? photoX : photoX + 125, 80, 30, 230);
-        ctx.globalAlpha = 1.0;
-      }
-
-      ctx.textAlign = "left";
-      ctx.fillStyle = document.getElementById("textColor2").value;
-      const startY = 105;
-      const spacing = 35;
+      ctx.fillStyle = "#87CEEB"; ctx.fillRect(0,10,560,50);
+      ctx.fillStyle = "#000"; ctx.textAlign = "center";
+      fillScaledText("Imperial Bureau of Ships and Services", 280, 32, 440, 18, fontFace);
       
+      const photoX = flip ? 390 : 10;
+      const textX = flip ? 25 : 185;
+      if (userImage) ctx.drawImage(userImage, photoX, 75, 160, 240);
+      
+      ctx.textAlign = "left"; ctx.fillStyle = "#112255";
       const fields = [
-        `NAME: ${document.getElementById("inName").value.toUpperCase()}`,
-        `ISSUE DATE: ${document.getElementById("inIssue").value}`,
-        `HOMEWORLD: ${document.getElementById("inHomeWorld").value}`,
+        `NAME: ${document.getElementById("inName").value}`,
+        `DATE: ${document.getElementById("inIssue").value}`,
+        `WORLD: ${document.getElementById("inHomeWorld").value}`,
         `SPECIES: ${document.getElementById("inSpecies").value}`,
-        `SHIP CLASS: ${document.getElementById("inClass").value}`,
-        `BoSS LICENSE #: ${document.getElementById("inNum").value}`
+        `CLASS: ${document.getElementById("inClass").value}`,
+        `ID: ${document.getElementById("inNum").value}`
       ];
-
-      fields.forEach((text, i) => {
-        fillScaledText(text, textX, startY + (i * spacing), 350, 15, fontFace, true);
-      });
-
-      ctx.drawImage(upcLong, 15, 320, 530, 25);
+      fields.forEach((t, i) => fillScaledText(t.toUpperCase(), textX, 105 + (i*35), 350, 15, fontFace));
+      ctx.drawImage(images.upcLong, 15, 320, 530, 25);
     }
 
-    // --- GIF RECORDING LOGIC ---
+    // --- GIF LOGIC ---
     document.getElementById("gifBtn").addEventListener("click", async () => {
-      statusDiv.innerText = "Initializing recording sequence...";
+      statusDiv.innerText = "Encoding... Please wait.";
       const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = 560;
-      tempCanvas.height = 360;
+      tempCanvas.width = 560; tempCanvas.height = 360;
       const tCtx = tempCanvas.getContext("2d");
 
       const gif = new GIF({
-        workers: 2,
-        quality: 10,
-        width: 560,
-        height: 360,
+        workers: 4, quality: 10, width: 560, height: 360,
         workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js'
       });
 
@@ -273,78 +148,51 @@
       maskImg.src = 'https://i.ibb.co/CpcPP5t7/new1maskalt3a-1-1.png';
       await new Promise(r => maskImg.onload = r);
 
-      let totalFrames = 30; // 3 seconds at 100ms delay
-      for (let i = 0; i < totalFrames; i++) {
-        tCtx.clearRect(0, 0, 560, 360);
+      for (let i = 0; i < 30; i++) {
+        tCtx.clearRect(0,0,560,360);
         tCtx.drawImage(canvas, 0, 0);
-
-        // Render Animated Mask to Frame
         tCtx.globalCompositeOperation = 'color-dodge';
-        const progress = i / totalFrames;
-        const hGrad = tCtx.createLinearGradient(0, 0, 560, 360);
-        hGrad.addColorStop(0, `hsla(${progress * 360}, 100%, 50%, 0.4)`);
-        hGrad.addColorStop(1, `hsla(${(progress * 360 + 180) % 360}, 100%, 50%, 0.4)`);
-        
-        tCtx.fillStyle = hGrad;
-        tCtx.fillRect(0, 0, 560, 360);
-        
+        const p = i / 30;
+        const g = tCtx.createLinearGradient(0,0,560,360);
+        g.addColorStop(0, `hsla(${p*360}, 100%, 50%, 0.4)`);
+        g.addColorStop(1, `hsla(${(p*360+180)%360}, 100%, 50%, 0.4)`);
+        tCtx.fillStyle = g; tCtx.fillRect(0,0,560,360);
         tCtx.globalCompositeOperation = 'destination-in';
         tCtx.drawImage(maskImg, 0, 0, 560, 360);
         tCtx.globalCompositeOperation = 'source-over';
-
+        
         gif.addFrame(tCtx, {copy: true, delay: 100});
-        statusDiv.innerText = `Processing Frame ${i+1} of ${totalFrames}...`;
+        statusDiv.innerText = `Captured ${i+1}/30`;
       }
 
-      gif.on('finished', function(blob) {
-        statusDiv.innerText = "Hologram verified. Downloading...";
-        const url = URL.createObjectURL(blob);
+      gif.on('finished', (blob) => {
         const link = document.createElement("a");
-        link.href = url;
-        link.download = `Imperial_License_${document.getElementById("inName").value}.gif`;
+        link.href = URL.createObjectURL(blob);
+        link.download = "Imperial_License.gif";
         link.click();
-        setTimeout(() => statusDiv.innerText = "", 3000);
+        statusDiv.innerText = "Download complete.";
       });
 
+      statusDiv.innerText = "Compiling GIF...";
       gif.render();
     });
 
-    // --- RANDOMIZER & UI ---
-    document.getElementById("randomButton").addEventListener("click", () => {
-      const names = ["Thocas D'ire", "Thilsih D'uli", "Utel'Jage", "Oiruh'Zede", "Besk Linel", "Laas Venram", "Qyyngirrrouwr", "Hwrakkivymurr", "Han Solo", "Dash Rendar"];
-      const worlds = ["Ryloth", "Coruscant", "Hoth", "Tatooine", "Mustafar", "Dathomir", "Corellia", "Kashyyyk"];
-      const species = ["Human", "Bith", "Twi'lek", "Hutt", "Bothan", "Talz", "Wookiee"];
-      const classes = ["Freighter", "Transport", "Barge", "Tug", "Hauler", "YT-1300", "Lambda Shuttle"];
-      document.getElementById("inName").value = names[Math.floor(Math.random() * names.length)];
-      document.getElementById("inHomeWorld").value = worlds[Math.floor(Math.random() * worlds.length)];
-      document.getElementById("inSpecies").value = species[Math.floor(Math.random() * species.length)];
-      document.getElementById("inClass").value = classes[Math.floor(Math.random() * classes.length)];
-      document.getElementById("inIssue").valueAsDate = new Date();
-      document.getElementById("inNum").value = "ISB-" + Math.floor(Math.random() * 8999 + 1000) + "-" + String.fromCharCode(65 + Math.floor(Math.random() * 26));
-      drawCard();
-    });
-
-    const liveInputs = ["inName", "inIssue", "inHomeWorld", "inSpecies", "inClass", "inNum", "gradColor1", "gradColor2", "gradColor3", "gradColor4", "gradColor5", "textColor1", "textColor2", "patternColor", "toggleAurebesh", "toggleLayout"];
-    liveInputs.forEach(id => document.getElementById(id).addEventListener("input", drawCard));
-
-    document.getElementById("fileInput").addEventListener("change", (e) => {
+    // Inputs
+    document.querySelectorAll('input').forEach(el => el.addEventListener('input', drawCard));
+    document.getElementById("userForm").onsubmit = (e) => { e.preventDefault(); drawCard(); };
+    document.getElementById("fileInput").onchange = (e) => {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = (ev) => {
         userImage = new Image();
         userImage.onload = () => drawCard();
-        userImage.src = event.target.result;
+        userImage.src = ev.target.result;
       };
       reader.readAsDataURL(e.target.files[0]);
-    });
-
-    document.getElementById("userForm").addEventListener("submit", (e) => { e.preventDefault(); drawCard(); });
-
-    document.getElementById("downloadBtn").addEventListener("click", () => {
-      const link = document.createElement("a");
-      link.download = `Imperial_License_${document.getElementById("inName").value}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    });
+    };
+    document.getElementById("downloadBtn").onclick = () => {
+      const a = document.createElement("a");
+      a.download = "License.png"; a.href = canvas.toDataURL(); a.click();
+    };
   </script>
 </body>
 </html>
