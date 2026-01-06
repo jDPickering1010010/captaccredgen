@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imperial License - GIF Export Edition</title>
+  <title>Imperial License - Thirty of Thirty Edition</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
   <style>
+    /* Canonical Aurek-Besh Font */
     @font-face {
       font-family: 'AurekBeshCanonical';
       src: url('https://raw.githubusercontent.com/jDPickering1010010/hostfiles/35316c0bcc4d02ef159b9847b15889729ef54386/fonts/Aurek-Besh.woff') format('woff');
@@ -45,6 +46,7 @@
     button, .upload-btn { background: #159; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
     button:hover { background: #0b3d61; }
 
+    /* The Animated Preview Area */
     .preview-wrap {
       position: relative;
       width: 560px;
@@ -57,6 +59,7 @@
 
     #result { display: block; background-color: #fff; }
 
+    /* Restore Original Mask Logic */
     .mask {
       position: absolute;
       top: 0;
@@ -92,14 +95,14 @@
       100% { background-position: 0% 50%; }
     }
 
-    #status { margin-top: 10px; font-style: italic; color: #ffcc00; }
+    #status { margin-top: 10px; font-weight: bold; color: #ffcc00; height: 20px; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <form id="userForm">
-      <h3>Imperial BoSS License Console</h3>
+      <h3>Imperial Bureau of Ships and Services</h3>
       
       <div class="form-grid">
         <div><label>Full Name</label><br><input type="text" id="inName" value="Thocas D'ire"></div>
@@ -138,14 +141,14 @@
     </form>
   </div>
 
-  <div class="preview-wrap" id="captureArea">
+  <div class="preview-wrap">
     <canvas id="result" width="560" height="360"></canvas>
     <div class="mask"></div>
   </div>
 
   <div id="status"></div>
   <div class="button-group">
-    <button id="downloadBtn" style="background:#444;">Download Static PNG</button>
+    <button id="downloadBtn" style="background:#444;">Download PNG</button>
     <button id="gifBtn" style="background:#800080;">Record Animated GIF</button>
   </div>
 
@@ -172,6 +175,9 @@
         cardBase.onload = () => drawCard();
     });
 
+    /**
+     * Scaling function for Aurek-Besh
+     */
     function fillScaledText(text, x, y, maxWidth, baseSize, fontFace, isBold = true) {
       let fontSize = baseSize;
       ctx.font = `${isBold ? 'bold' : ''} ${fontSize}px ${fontFace}`;
@@ -246,11 +252,9 @@
       ctx.drawImage(upcLong, 15, 320, 530, 25);
     }
 
-    // GIF Export Logic
+    // --- GIF RECORDING LOGIC ---
     document.getElementById("gifBtn").addEventListener("click", async () => {
-      statusDiv.innerText = "Initializing recording (3 seconds)...";
-      
-      // We create a temporary canvas to merge the static card and animated mask
+      statusDiv.innerText = "Initializing recording sequence...";
       const tempCanvas = document.createElement("canvas");
       tempCanvas.width = 560;
       tempCanvas.height = 360;
@@ -267,48 +271,45 @@
       const maskImg = new Image();
       maskImg.crossOrigin = "anonymous";
       maskImg.src = 'https://i.ibb.co/CpcPP5t7/new1maskalt3a-1-1.png';
-
       await new Promise(r => maskImg.onload = r);
 
-      let frames = 30; // 3 seconds at 10fps
-      for (let i = 0; i < frames; i++) {
+      let totalFrames = 30; // 3 seconds at 100ms delay
+      for (let i = 0; i < totalFrames; i++) {
         tCtx.clearRect(0, 0, 560, 360);
-        // Draw the static card
         tCtx.drawImage(canvas, 0, 0);
 
-        // Draw the "hologram" manually to the temporary canvas for the GIF
-        // This mimics the CSS animation
+        // Render Animated Mask to Frame
         tCtx.globalCompositeOperation = 'color-dodge';
-        const offset = (i / frames) * 100;
+        const progress = i / totalFrames;
         const hGrad = tCtx.createLinearGradient(0, 0, 560, 360);
-        hGrad.addColorStop(0, `hsla(${offset * 3.6}, 100%, 50%, 0.4)`);
-        hGrad.addColorStop(1, `hsla(${(offset + 50) * 3.6}, 100%, 50%, 0.4)`);
+        hGrad.addColorStop(0, `hsla(${progress * 360}, 100%, 50%, 0.4)`);
+        hGrad.addColorStop(1, `hsla(${(progress * 360 + 180) % 360}, 100%, 50%, 0.4)`);
         
         tCtx.fillStyle = hGrad;
         tCtx.fillRect(0, 0, 560, 360);
         
-        // Clip to the mask
         tCtx.globalCompositeOperation = 'destination-in';
         tCtx.drawImage(maskImg, 0, 0, 560, 360);
         tCtx.globalCompositeOperation = 'source-over';
 
         gif.addFrame(tCtx, {copy: true, delay: 100});
-        statusDiv.innerText = `Capturing Frame ${i+1}/${frames}...`;
+        statusDiv.innerText = `Processing Frame ${i+1} of ${totalFrames}...`;
       }
 
       gif.on('finished', function(blob) {
-        statusDiv.innerText = "Done! Downloading GIF...";
+        statusDiv.innerText = "Hologram verified. Downloading...";
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
         link.download = `Imperial_License_${document.getElementById("inName").value}.gif`;
         link.click();
+        setTimeout(() => statusDiv.innerText = "", 3000);
       });
 
       gif.render();
     });
 
-    // Randomizer and Live Updates
+    // --- RANDOMIZER & UI ---
     document.getElementById("randomButton").addEventListener("click", () => {
       const names = ["Thocas D'ire", "Thilsih D'uli", "Utel'Jage", "Oiruh'Zede", "Besk Linel", "Laas Venram", "Qyyngirrrouwr", "Hwrakkivymurr", "Han Solo", "Dash Rendar"];
       const worlds = ["Ryloth", "Coruscant", "Hoth", "Tatooine", "Mustafar", "Dathomir", "Corellia", "Kashyyyk"];
