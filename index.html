@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imperial License - Combined Masked Foil</title>
+  <title>Imp BoSS: Licensing Console</title>
   <style>
+    /* Loading Canonical Aurek-Besh */
+    @font-face {
+      font-family: 'AurekBeshCanonical';
+      src: url('https://raw.githubusercontent.com/jDPickering1010010/hostfiles/35316c0bcc4d02ef159b9847b15889729ef54386/fonts/Aurek-Besh.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     body {
       font-family: "Arial", sans-serif;
       background-color: #1a1a2e;
@@ -31,6 +39,7 @@
     label { font-size: 13px; font-weight: bold; }
     input { padding: 5px; border: 1px solid #159; border-radius: 4px; width: 90%; }
     input[type="color"] { width: 40px; height: 25px; padding: 1px; }
+    input[type="checkbox"] { width: auto; margin-right: 5px; cursor: pointer; }
 
     .button-group { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
     button, .upload-btn { background: #159; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
@@ -46,11 +55,9 @@
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     }
 
-    #result {
-      display: block;
-      background-color: #fff;
-    }
+    #result { display: block; background-color: #fff; }
 
+    /* RESTORED: Exact Hologram Logic from index.html */
     .mask {
       position: absolute;
       top: 0;
@@ -77,6 +84,7 @@
       mask-mode: color-dodge;
 
       mix-blend-mode: color-dodge;
+      opacity: 0.9; 
     }
 
     @keyframes holo-animation1 {
@@ -90,19 +98,23 @@
 
   <div class="container">
     <form id="userForm">
-      <h3>Imperial Bureau of Ships and Services</h3>
+      <h3>Imperial Bureau of Ships and Services: Licensing Console</h3>
       
       <div class="form-grid">
-        <div><label>Full Name</label><br><input type="text" id="inName" placeholder="Name" value="Han Solo"></div>
+        <div><label>Full Name</label><br><input type="text" id="inName" value="Thocas D'ire"></div>
         <div><label>Date of Issue</label><br><input type="date" id="inIssue"></div>
-        <div><label>Homeworld</label><br><input type="text" id="inHomeWorld" placeholder="Planet" value="Corellia"></div>
-        <div><label>Species</label><br><input type="text" id="inSpecies" placeholder="Species" value="Human"></div>
-        <div><label>Ship Class</label><br><input type="text" id="inClass" placeholder="Class" value="YT-1300"></div>
-        <div><label>BoSS License #</label><br><input type="text" id="inNum" placeholder="ID Number" value="ISB-9920-A"></div>
+        <div><label>Homeworld</label><br><input type="text" id="inHomeWorld" value="Coruscant"></div>
+        <div><label>Species</label><br><input type="text" id="inSpecies" value="Human"></div>
+        <div><label>Ship Certification Class</label><br><input type="text" id="inClass" value="Freighter"></div>
+        <div><label>BoSS License #</label><br><input type="text" id="inNum" value="ISB-9920-A"></div>
 
-        <div class="form-section">Visual Stylization</div>
+        <div class="form-section">Visual Stylization & Layout</div>
         <div>
-          <label>Header Gradients</label><br>
+          <label><input type="checkbox" id="toggleAurebesh" checked> Use Aurek-Besh Font</label><br>
+          <label><input type="checkbox" id="toggleLayout"> Flip Photo Layout</label>
+        </div>
+        <div>
+          <label>Header Colors</label><br>
           <input type="color" id="gradColor1" value="#87CEEB">
           <input type="color" id="gradColor2" value="#4682B4">
           <input type="color" id="gradColor3" value="#4682B4">
@@ -123,19 +135,17 @@
         <button type="button" id="saveButton">Export CSV</button>
         <input type="file" id="loadButton" accept=".csv" style="display:none">
         <button type="button" onclick="document.getElementById('loadButton').click()">Import CSV</button>
-        <button type="submit" style="background: #28a745;">Apply All Changes</button>
+        <button type="submit" style="background: #28a745;">Update Preview</button>
       </div>
     </form>
   </div>
 
-  <br>
   <div class="preview-wrap">
     <canvas id="result" width="560" height="360"></canvas>
     <div class="mask"></div>
   </div>
 
-  <br>
-  <button id="downloadBtn" style="background:#444; font-size: 18px; margin-bottom: 40px;">Download Static PNG</button>
+  <button id="downloadBtn" style="background:#444; font-size: 18px; margin-bottom: 40px;">Download Security PNG</button>
 
   <script>
     const canvas = document.getElementById("result");
@@ -147,16 +157,37 @@
     const upcTall = new Image();
     const cardBase = new Image();
 
-    [imgLogo, upcLong, upcTall, cardBase].forEach(a => a.crossOrigin = "anonymous");
+    const assets = [imgLogo, upcLong, upcTall, cardBase];
+    assets.forEach(a => a.crossOrigin = "anonymous");
 
     cardBase.src = 'https://i.ibb.co/6n2LXzc/card-Base-Imp02.png';
     imgLogo.src = 'https://i.ibb.co/5xM7hcd/logo-Imp001.png';
     upcLong.src = 'https://i.ibb.co/y6jhPxj/upc.png';
     upcTall.src = 'https://i.ibb.co/1KcZ9wF/upctall.png';
 
-    cardBase.onload = () => drawCard();
+    document.fonts.ready.then(() => {
+        cardBase.onload = () => drawCard();
+    });
+
+    /**
+     * Helper to auto-scale font size based on available width
+     */
+    function fillScaledText(text, x, y, maxWidth, baseSize, fontFace, isBold = true) {
+      let fontSize = baseSize;
+      ctx.font = `${isBold ? 'bold' : ''} ${fontSize}px ${fontFace}`;
+      
+      while (ctx.measureText(text).width > maxWidth && fontSize > 8) {
+        fontSize--;
+        ctx.font = `${isBold ? 'bold' : ''} ${fontSize}px ${fontFace}`;
+      }
+      ctx.fillText(text, x, y);
+    }
 
     function drawCard() {
+      const useAurebesh = document.getElementById("toggleAurebesh").checked;
+      const flipLayout = document.getElementById("toggleLayout").checked;
+      const fontFace = useAurebesh ? "AurekBeshCanonical" : "Arial";
+
       ctx.globalCompositeOperation = 'source-over';
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, 560, 360);
@@ -172,41 +203,56 @@
       ctx.fillRect(0, 10, 560, 50);
 
       ctx.strokeStyle = document.getElementById("patternColor").value;
-      ctx.lineWidth = 0.5;
+      ctx.lineWidth = 0.85;
       for (let i = 10; i <= 60; i += 5) {
         ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(560, i); ctx.stroke();
       }
 
+      // Header Text
       ctx.fillStyle = document.getElementById("textColor1").value;
       ctx.textAlign = "center";
-      ctx.font = "bold 18px Arial";
-      ctx.fillText("Imperial Bureau of Ships and Services", 280, 32);
-      ctx.font = "14px Arial";
-      ctx.fillText("CAPTAIN'S ACCREDITED LICENSE", 280, 52);
-
+      
+      fillScaledText("Imperial Bureau of Ships and Services", 280, 32, 440, 16, fontFace, true);
+      fillScaledText("CAPTAIN'S ACCREDITED LICENSE", 280, 52, 440, 14, fontFace, false);
+      
       ctx.drawImage(imgLogo, 10, 11, 48, 48);
       ctx.drawImage(imgLogo, 502, 11, 48, 48);
 
+      // Layout Calculation
+      const photoX = flipLayout ? 390 : 10;
+      const textX = flipLayout ? 25 : 185;
+      const maxTextWidth = 350;
+
+      // User Photo
       if (userImage) {
-        ctx.drawImage(userImage, 10, 75, 160, 240);
+        ctx.drawImage(userImage, photoX, 75, 160, 240);
         ctx.globalAlpha = 0.4;
-        ctx.drawImage(upcTall, 135, 80, 30, 230);
+        ctx.drawImage(upcTall, flipLayout ? photoX : photoX + 125, 80, 30, 230);
         ctx.globalAlpha = 1.0;
       }
 
+      // Credentials with Scaling
       ctx.textAlign = "left";
       ctx.fillStyle = document.getElementById("textColor2").value;
-      ctx.font = "bold 16px Arial";
-      const infoX = 185;
-      ctx.fillText(`NAME: ${document.getElementById("inName").value.toUpperCase()}`, infoX, 105);
-      ctx.fillText(`ISSUE DATE: ${document.getElementById("inIssue").value}`, infoX, 140);
-      ctx.fillText(`HOMEWORLD: ${document.getElementById("inHomeWorld").value}`, infoX, 175);
-      ctx.fillText(`SPECIES: ${document.getElementById("inSpecies").value}`, infoX, 210);
-      ctx.fillText(`SHIP CLASS: ${document.getElementById("inClass").value}`, infoX, 245);
-      ctx.fillText(`BoSS LICENSE #: ${document.getElementById("inNum").value}`, infoX, 280);
+      const startY = 105;
+      const spacing = 35;
+      
+      const fields = [
+        `NAME: ${document.getElementById("inName").value.toUpperCase()}`,
+        `ISSUE DATE: ${document.getElementById("inIssue").value}`,
+        `HOMEWORLD: ${document.getElementById("inHomeWorld").value}`,
+        `SPECIES: ${document.getElementById("inSpecies").value}`,
+        `SHIP CLASS: ${document.getElementById("inClass").value}`,
+        `BoSS LICENSE #: ${document.getElementById("inNum").value}`
+      ];
+
+      fields.forEach((text, i) => {
+        fillScaledText(text, textX, startY + (i * spacing), maxTextWidth, 15, fontFace, true);
+      });
 
       ctx.drawImage(upcLong, 15, 320, 530, 25);
 
+      // Bake subtle foil into the PNG export
       ctx.globalCompositeOperation = 'soft-light';
       const holo = ctx.createLinearGradient(0, 0, 560, 360);
       holo.addColorStop(0, "rgba(255, 0, 0, 0.1)");
@@ -217,20 +263,26 @@
       ctx.globalCompositeOperation = 'source-over';
     }
 
-    const styleInputs = ["gradColor1", "gradColor2", "gradColor3", "gradColor4", "gradColor5", "textColor1", "textColor2", "patternColor"];
-    styleInputs.forEach(id => {
-      document.getElementById(id).addEventListener("input", drawCard);
+    // --- LORE RANDOMIZER ---
+    document.getElementById("randomButton").addEventListener("click", () => {
+      const names = ["Thocas D'ire", "Thilsih D'uli", "Utel'Jage", "Oiruh'Zede", "Besk Linel", "Laas Venram", "Qyyngirrrouwr", "Hwrakkivymurr", "Han Solo", "Dash Rendar"];
+      const worlds = ["Ryloth", "Coruscant", "Hoth", "Tatooine", "Mustafar", "Dathomir", "Corellia", "Kashyyyk"];
+      const species = ["Human", "Bith", "Twi'lek", "Hutt", "Bothan", "Talz", "Wookiee"];
+      const classes = ["Freighter", "Transport", "Barge", "Tug", "Hauler", "YT-1300", "Lambda Shuttle"];
+
+      document.getElementById("inName").value = names[Math.floor(Math.random() * names.length)];
+      document.getElementById("inHomeWorld").value = worlds[Math.floor(Math.random() * worlds.length)];
+      document.getElementById("inSpecies").value = species[Math.floor(Math.random() * species.length)];
+      document.getElementById("inClass").value = classes[Math.floor(Math.random() * classes.length)];
+      document.getElementById("inIssue").valueAsDate = new Date();
+      document.getElementById("inNum").value = "ISB-" + Math.floor(Math.random() * 8999 + 1000) + "-" + String.fromCharCode(65 + Math.floor(Math.random() * 26));
+      
+      drawCard();
     });
 
-    document.getElementById("randomButton").addEventListener("click", () => {
-      const db = [{s:"Human",w:"Corellia",n:["Dash Rendar","Han Solo"]},{s:"Wookiee",w:"Kashyyyk",n:["Chewbacca","Tarfful"]}];
-      const e = db[Math.floor(Math.random()*db.length)];
-      document.getElementById("inSpecies").value = e.s;
-      document.getElementById("inHomeWorld").value = e.w;
-      document.getElementById("inName").value = e.n[Math.floor(Math.random()*e.n.length)];
-      document.getElementById("inIssue").valueAsDate = new Date();
-      document.getElementById("inNum").value = "ISB-"+Math.random().toString(36).substr(2,6).toUpperCase();
-      drawCard();
+    const liveInputs = ["inName", "inIssue", "inHomeWorld", "inSpecies", "inClass", "inNum", "gradColor1", "gradColor2", "gradColor3", "gradColor4", "gradColor5", "textColor1", "textColor2", "patternColor", "toggleAurebesh", "toggleLayout"];
+    liveInputs.forEach(id => {
+      document.getElementById(id).addEventListener("input", drawCard);
     });
 
     document.getElementById("fileInput").addEventListener("change", (e) => {
@@ -247,7 +299,7 @@
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
       const link = document.createElement("a");
-      link.download = `Imperial_License_${document.getElementById("inName").value || 'Card'}.png`;
+      link.download = `Imperial_License_${document.getElementById("inName").value}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
